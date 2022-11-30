@@ -1,18 +1,25 @@
+package rest;
+
 import org.junit.jupiter.api.Test;
+import rest.models.RegisterBody;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.http.ContentType.JSON;
 import static org.hamcrest.Matchers.is;
 
-public class ReqresHWorkTest {
+public class ReqresHWorkModelTest {
     public String register = "https://reqres.in/api/register";
+
     public String users = "https://reqres.in/api/users";
 
     @Test
     void registerSuccessTest() {
-        String requestBody = "{\"email\": \"eve.holt@reqres.in\",\"password\": \"pistol\"}";
+        RegisterBody registerBody = new RegisterBody();
+        registerBody.setEmail("eve.holt@reqres.in");
+        registerBody.setPassword("pistol");
+
         given()
-                .log().uri().body(requestBody).contentType(JSON)
+                .log().uri().body(registerBody).contentType(JSON)
                 .when()
                 .post(register)
                 .then()
