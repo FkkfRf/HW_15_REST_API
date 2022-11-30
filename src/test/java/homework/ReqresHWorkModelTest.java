@@ -1,7 +1,7 @@
-package rest;
+package homework;
 
 import org.junit.jupiter.api.Test;
-import rest.models.RegisterBody;
+import homework.models.RegisterBody;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.http.ContentType.JSON;

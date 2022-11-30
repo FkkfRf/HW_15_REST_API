@@ -1,4 +1,4 @@
-package rest.models;
+package homework.models;
 
 import lombok.Data;
 
