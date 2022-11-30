@@ -4,8 +4,7 @@ import static io.restassured.RestAssured.given;
 import static io.restassured.http.ContentType.JSON;
 import static org.hamcrest.Matchers.is;
 
-public class ReqresInTest
-{
+public class ReqresInTest {
 
         /*
         1. Make POST request to https://reqres.in/api/login
@@ -17,6 +16,7 @@ public class ReqresInTest
     @Test
     void loginTest() {
         String data = "{ \"email\": \"eve.holt@reqres.in\", \"password\": \"cityslicka\" }";
+
 
         given()
                 .log().uri()
