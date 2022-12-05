@@ -1,102 +1,101 @@
 package homework;
 
+import homework.models.*;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import homework.models.RegisterBody;
 
+import static homework.specs.RequestSpecs.registerRequestSpec;
+import static homework.specs.RequestSpecs.usersRequestSpec;
+import static homework.specs.ResponseSpecs.*;
 import static io.restassured.RestAssured.given;
+import static io.restassured.RestAssured.requestSpecification;
 import static io.restassured.http.ContentType.JSON;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.is;
 
-public class ReqresHWorkModelTest {
+public class ReqresHWorkModelTest extends BaseTest{
     public String register = "https://reqres.in/api/register";
-
-    public String users = "https://reqres.in/api/users";
+public String users = "https://reqres.in/api/users";
 
     @Test
+    @DisplayName("Проверка успешной регистрации")
     void registerSuccessTest() {
         RegisterBody registerBody = new RegisterBody();
         registerBody.setEmail("eve.holt@reqres.in");
         registerBody.setPassword("pistol");
 
-        given()
-                .log().uri().body(registerBody).contentType(JSON)
+        RegisterSuccessResponse response = given()
+                .spec(registerRequestSpec)
+                .body(registerBody)
                 .when()
-                .post(register)
+                .post()
                 .then()
-                .statusCode(200)
-                .log().status()
-                .body("id", is(4));
+                .spec(registerSuccessResponseSpec)
+                .extract().as(RegisterSuccessResponse.class);
+
+        assertThat(response.getId()).isEqualTo(4);
+        assertThat(response.getToken()).isEqualTo("QpwL5tke4Pnpja7X4");
     }
 
     @Test
+    @DisplayName("Проверка НЕуспешной регистрации")
     void registerUnSuccessTest() {
-        String requestBody = "{\"email\": \"sydney@fife\"}";
-        given()
-                .log().uri().body(requestBody).contentType(JSON)
+        RegisterBody registerBody = new RegisterBody();
+        registerBody.setEmail("sydney@fife");
+
+        RegisterUnSuccessResponse response = given()
+                .spec(registerRequestSpec)
+                .body(registerBody)
                 .when()
-                .post(register)
+                .post()
                 .then()
-                .log().status()
-                .log().body()
-                .statusCode(400)
-                .body("error", is("Missing password"));
+                .spec(registerUnSuccessResponseSpec)
+                .extract().as(RegisterUnSuccessResponse.class);
+        assertThat(response.getError()).isEqualTo("Missing password");
     }
 
     @Test
+    @DisplayName("Проверка успешного создания пользователя")
     void createSuccessTest() {
-        String data = "{ \"name\": \"morpheus\", \"job\": \"leader\" }";
-        given()
-                .log().uri()
+        CreateBody createBody = new CreateBody();
+        createBody.setJob("leader");
+        createBody.setName("morpheus");
+
+        CreateSuccessResponse response = given()
+                .spec(usersRequestSpec)
+                .body(createBody)
                 .when()
-                .body(data).contentType(JSON)
-                .post(users)
+                .post()
                 .then()
-                .log().status()
-                .log().body()
-                .statusCode(201)
-                .body("name", is("morpheus"))
-                .body("job", is("leader"));
+                .spec(createSuccessResponseSpec)
+                .extract().as(CreateSuccessResponse.class);
+        assertThat(response.getName()).isEqualTo("morpheus");
+        assertThat(response.getJob()).isEqualTo("leader");
     }
 
     @Test
+    @DisplayName("Проверка НЕуспешного создания пользователя")
     void createUnSuccessTest() {
         given()
-                .log().uri()
+                .spec(usersRequestSpec)
+                .body("TestUser")
                 .when()
-                .contentType(JSON)
-                .body("data")
-                .post(users)
+                .post()
                 .then()
-                .log().status()
-                .log().body()
-                .statusCode(400);
-
+                .spec(createUnSuccessResponseSpec);
     }
 
     @Test
+    @DisplayName("Проверка удаления пользователя")
     void deleteSuccessTest() {
         given()
-                .log().uri()
+                .spec(usersRequestSpec)
                 .when()
-                .delete(users)
+                .delete()
                 .then()
-                .log().status()
-                .log().body()
-                .statusCode(204);
+                .spec(deleteResponseSpec);
     }
 
-    @Test
-    void singleUserSuccessTest() {
-        given()
-                .log().uri()
-                .when()
-                .contentType(JSON)
-                .get(users)
-                .then()
-                .log().status()
-                .log().body()
-                .statusCode(200)
-                .body("page", is(1));
-    }
+
 }
 
