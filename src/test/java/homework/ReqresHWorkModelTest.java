@@ -8,15 +8,9 @@ import static homework.specs.RequestSpecs.registerRequestSpec;
 import static homework.specs.RequestSpecs.usersRequestSpec;
 import static homework.specs.ResponseSpecs.*;
 import static io.restassured.RestAssured.given;
-import static io.restassured.RestAssured.requestSpecification;
-import static io.restassured.http.ContentType.JSON;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.is;
 
-public class ReqresHWorkModelTest extends BaseTest{
-    public String register = "https://reqres.in/api/register";
-public String users = "https://reqres.in/api/users";
-
+public class ReqresHWorkModelTest extends BaseTest {
     @Test
     @DisplayName("Проверка успешной регистрации")
     void registerSuccessTest() {
@@ -95,7 +89,5 @@ public String users = "https://reqres.in/api/users";
                 .then()
                 .spec(deleteResponseSpec);
     }
-
-
 }
 
