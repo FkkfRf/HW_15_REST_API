@@ -1,6 +1,6 @@
 package lesson.models.pojo;
 
-public class LoginBodyPojo {
+public class LoginBodyPojoModel {
 
     //  "{ \"email\": \"eve.holt@reqres.in\", \"password\": \"cityslicka\" }";
 
