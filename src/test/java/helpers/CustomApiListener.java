@@ -6,8 +6,8 @@ public class CustomApiListener {
     private static final AllureRestAssured FILTER = new AllureRestAssured();
 
     public static AllureRestAssured withCustomTemplates() {
-        FILTER.setRequestTemplate("request.ftl");
-        FILTER.setResponseTemplate("response.ftl");
+        FILTER.setRequestTemplate("tpl/request.ftl");
+        FILTER.setResponseTemplate("tpl/response.ftl");
         return FILTER;
     }
 }
